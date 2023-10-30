@@ -134,10 +134,11 @@ public class ViewModel {
         for (int i = 0; i < selectedImagesOutput.size(); i++) {
             for (Integer index : filteringIndices) {
                 float labelValue = selectedImagesOutput.get(i)[index];
+                System.out.println("Photo " + i + " Label:" + labels[index] + " value: " + labelValue);
                 if (labelValue >= detectionThreshold) {
                     filteredImages.add(selectedImages.get(i));
+                    break;
                 }
-                System.out.println("Photo " + i + " Label:" + labels[index] + " value: " + labelValue);
             }
         }
 
