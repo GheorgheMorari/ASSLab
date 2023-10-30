@@ -57,7 +57,7 @@ public class ViewModel {
                         e.printStackTrace();
                     }
                 }
-                updateViewCallback.accept(this.selectedImages);
+                updateViewCallback.accept(selectedImages);
             }
         }
     }
@@ -70,4 +70,10 @@ public class ViewModel {
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // Allow multiple image selection
         selectionActivityLauncher.launch(intent);
     }
+
+    void filterImages(String className) {
+        System.out.println(className);
+        updateViewCallback.accept(selectedImages);
+    }
+
 }

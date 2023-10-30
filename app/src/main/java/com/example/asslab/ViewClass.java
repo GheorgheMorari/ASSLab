@@ -6,11 +6,14 @@ import androidx.constraintlayout.utils.widget.ImageFilterView;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -19,6 +22,7 @@ public class ViewClass extends AppCompatActivity {
 
     Button selectBtn, filterBtn;
     ViewModel viewModel;
+    TextInputEditText className;
     ArrayList<Integer> imageViewIds;
 
     GridLayout imageGrid;
@@ -33,6 +37,7 @@ public class ViewClass extends AppCompatActivity {
         selectBtn = findViewById(R.id.selectBtn);
         filterBtn = findViewById(R.id.filterBtn);
         imageGrid = findViewById(R.id.imageGrid);
+        className = findViewById(R.id.className);
         viewModel = new ViewModel(this, this::updateView);
 
         float scale = getResources().getDisplayMetrics().density;
@@ -48,17 +53,15 @@ public class ViewClass extends AppCompatActivity {
         });
 
         filterBtn.setOnClickListener(v -> {
-//            bitmap = bitmaps.get(0);
-//            imageView.setImageBitmap(bitmap);
-//            scaled_bitmap = Bitmap.createScaledBitmap(bitmap, network.model_input_width, network.model_input_height, true);
-//            scaled_bitmap = scaled_bitmap.copy(Bitmap.Config.ARGB_8888, true);
-//            TensorImage asdf = TensorImage.fromBitmap(scaled_bitmap);
-//            ByteBuffer buf = asdf.getBuffer();
-//            result_text_view.setText(network.run(buf)[0] + "");
+            Editable classNameText = className.getText();
+            String classNameString = (classNameText == null ? "" : classNameText.toString());
+            viewModel.filterImages(classNameString);
         });
     }
 
     void updateView(ArrayList<Bitmap> bitmaps) {
+        if (bitmaps == null)
+            return;
         // Determine if you need to create more ImageFilterViews or remove excess ones
         if (bitmaps.size() > imageViewIds.size()) {
             // Create new ImageFilterViews as needed
