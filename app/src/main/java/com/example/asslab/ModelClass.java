@@ -10,16 +10,12 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class Model {
+public class ModelClass {
 
-    int model_input_width;
-    int model_input_height;
     MobilenetV110224Quant model;
     TensorBuffer inputFeature0;
 
-    public Model(int model_input_width, int model_input_height, Context context) {
-        this.model_input_width = model_input_width;
-        this.model_input_height = model_input_height;
+    public ModelClass(Context context) {
         allocate(context);
     }
 
