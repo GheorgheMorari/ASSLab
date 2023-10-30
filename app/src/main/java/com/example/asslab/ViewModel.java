@@ -11,7 +11,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.tensorflow.lite.support.image.TensorImage;
+
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -25,13 +28,16 @@ public class ViewModel {
     ActivityResultLauncher<Intent> selectionActivityLauncher;
     AppCompatActivity activity;
     ArrayList<Bitmap> selectedImages;
-
+    ArrayList<float[]> selectedImagesOutput;
     Consumer<ArrayList<Bitmap>> updateViewCallback;
+    ModelClass modelClass;
+    boolean processedFlag = false;
 
     public ViewModel(AppCompatActivity activity, Consumer<ArrayList<Bitmap>> updateViewCallback) {
         this.activity = activity;
         this.updateViewCallback = updateViewCallback;
         selectionActivityLauncher = activity.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::onSelectFinished);
+        modelClass = new ModelClass(activity);
     }
 
     void onSelectFinished(ActivityResult result) {
@@ -57,7 +63,9 @@ public class ViewModel {
                         e.printStackTrace();
                     }
                 }
+                processedFlag = false;
                 updateViewCallback.accept(selectedImages);
+                processImagesAsync();
             }
         }
     }
@@ -72,8 +80,27 @@ public class ViewModel {
     }
 
     void filterImages(String className) {
-        System.out.println(className);
+        if (className.equals("") || !processedFlag) {
+            updateViewCallback.accept(selectedImages); // Show all images if it's not done processing or the class name is empty
+            return;
+        }
+        //TODO
         updateViewCallback.accept(selectedImages);
+    }
+
+    void processImagesAsync() {
+        new Thread(() -> {
+            selectedImagesOutput = new ArrayList<>(selectedImages.size());
+            modelClass.allocate(activity);
+            for (Bitmap selectedImage : selectedImages) {
+                Bitmap scaledSelectedImage = Bitmap.createScaledBitmap(selectedImage, 224, 224, true).copy(Bitmap.Config.ARGB_8888, true);
+                TensorImage tensorImage = TensorImage.fromBitmap(scaledSelectedImage);
+                ByteBuffer imageByteBuf = tensorImage.getBuffer();
+                selectedImagesOutput.add(modelClass.run(imageByteBuf));
+            }
+            modelClass.free();
+            processedFlag = true;
+        }).start();
     }
 
 }
