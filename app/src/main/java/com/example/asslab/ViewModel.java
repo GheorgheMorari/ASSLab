@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -103,25 +105,40 @@ public class ViewModel {
             return;
         }
         filteredImages = new ArrayList<>();
+        Set<Integer> filteringIndices = new HashSet<>();
+
+
         int minDistance = Integer.MAX_VALUE;
         int closestLabelIndex = 0;
         float detectionThreshold = 10.0f;
 
         for (int i = 0; i < labels.length; i++) {
+            String label = labels[i];
+            if (label.contains(className)) {
+                filteringIndices.add(i);
+            }
             int distance = modifiedLevenshteinDistance(className, labels[i]);
             if (distance < minDistance) {
                 minDistance = distance;
                 closestLabelIndex = i;
             }
         }
-        System.out.println("Closest label:" + labels[closestLabelIndex]);
+        filteringIndices.add(closestLabelIndex);
+
+        System.out.println("Filtering indices:");
+        for (Integer index : filteringIndices) {
+            System.out.println(labels[index]);
+        }
+        System.out.println("Closest label levenshtein:" + labels[closestLabelIndex]);
 
         for (int i = 0; i < selectedImagesOutput.size(); i++) {
-            float labelValue = selectedImagesOutput.get(i)[closestLabelIndex];
-            if (labelValue >= detectionThreshold) {
-                filteredImages.add(selectedImages.get(i));
+            for (Integer index : filteringIndices) {
+                float labelValue = selectedImagesOutput.get(i)[index];
+                if (labelValue >= detectionThreshold) {
+                    filteredImages.add(selectedImages.get(i));
+                }
+                System.out.println("Photo " + i + " Label:" + labels[index] + " value: " + labelValue);
             }
-            System.out.println("Label value: " + labelValue + " " + i);
         }
 
         updateViewCallback.accept(filteredImages);
