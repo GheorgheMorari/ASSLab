@@ -45,7 +45,9 @@ The inference is done using the graphics processing unit delegate of the tensorf
 
 # 9. Examples
 
- ADD VIDEO HERE
+
+https://github.com/GheorgheMorari/ASSLab/assets/53918731/ef926df3-2fcd-4661-bad5-8e033633208f
+
 
 # 10. Conclusion
 The project can be expanded to behave more like an android gallery and to have more features present in cloud gallery providers and to offer a decent customer experience.
