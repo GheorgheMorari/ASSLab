@@ -25,8 +25,8 @@ The usage of this app is very simple, it is designed to mimick the usage of a si
 
 # 5. Structure
 The structure of the app is based on a MVVM architecture.
+![ass_lab drawio](https://github.com/GheorgheMorari/ASSLab/assets/53918731/9237baea-64f1-4461-abcf-fc2087e8a287)
 
-![ass_lab drawio](https://github.com/GheorgheMorari/ASSLab/assets/53918731/7670a412-0861-4edf-a67b-0c00fcf0bf7f)
 # 6. Benefits
 1. All user data and photos remain on the user's device, eliminating concerns about data breaches, unauthorized access, or misuse of personal photos by third-party services. Users have full control over their data, reducing privacy risks.
 2. The solution eliminates the need for constant internet connectivity and cloud storage, making it ideal for users in areas with limited or unreliable internet access. It also reduces the environmental footprint associated with cloud data centers.
@@ -45,9 +45,7 @@ The inference is done using the graphics processing unit delegate of the tensorf
 
 # 9. Examples
 
-
-https://github.com/GheorgheMorari/ASSLab/assets/53918731/ef926df3-2fcd-4661-bad5-8e033633208f
-
+https://github.com/GheorgheMorari/ASSLab/assets/53918731/3f02562b-47c5-49b4-9afb-63d4273d88b3
 
 # 10. Conclusion
 The project can be expanded to behave more like an android gallery and to have more features present in cloud gallery providers and to offer a decent customer experience.
